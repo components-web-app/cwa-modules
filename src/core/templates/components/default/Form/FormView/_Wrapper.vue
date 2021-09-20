@@ -23,7 +23,7 @@ export default Vue.extend({
       default: null
     },
     labelAttr: {
-      type: Object,
+      type: [Object, Array],
       required: false,
       default: null
     },

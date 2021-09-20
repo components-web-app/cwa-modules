@@ -13,6 +13,7 @@ import {
   PublishableToggledEvent,
   COMPONENT_MANAGER_EVENTS
 } from './events'
+import Forms from './forms'
 
 interface PatchRequest {
   endpoint: string
@@ -22,6 +23,7 @@ export default class Cwa {
   public ctx: any
   public options: CwaOptions
   public fetcher: Fetcher
+  public forms: Forms
   public $storage: Storage
   public $state
   public $eventBus
@@ -62,6 +64,15 @@ export default class Cwa {
         fetchConcurrency: this.options.fetchConcurrency
       }
     )
+
+    /**
+     * init forms
+     */
+    this.forms = new Forms({
+      $axios: this.ctx.$axios,
+      store: this.ctx.store,
+      vuexNamespace: this.options.vuex.namespace
+    })
 
     if (process.client) {
       this.initMercure()
