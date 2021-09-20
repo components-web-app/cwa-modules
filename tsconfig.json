@@ -10,8 +10,8 @@
       "@types/node",
       "@types/jest",
       "@nuxt/types",
-      "@nuxt/components/dist",
       "@nuxtjs/auth-next",
+      "@nuxt/components",
       "./src/shim"
     ],
     "esModuleInterop": true,
@@ -23,10 +23,10 @@
     // "declarationDir": "temp/types",
     "paths": {
       "@cwa/nuxt-module/*": [
-        "../src/*"
+        "./src/*"
       ],
       "~/*": [
-        "../demo/*"
+        "./demo/*"
       ]
     }
   },

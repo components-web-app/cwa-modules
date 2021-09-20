@@ -27,6 +27,7 @@
       "@nuxt/types",
       "@nuxtjs/axios",
       "@nuxtjs/auth-next",
+      "@nuxt/components",
       "../src/@types",
       "../src/shim"
     ]

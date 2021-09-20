@@ -2,12 +2,11 @@ import { resolve, join, basename } from 'path'
 import fs from 'fs'
 import _set from 'lodash/set'
 import _get from 'lodash/get'
-// import { Component } from '@nuxt/components/dist'
 import { Module } from '@nuxt/types'
 import consola from 'consola'
 import { CwaOptions } from '../index'
 
-// Working out how to include type from package instead...
+// // Working out how to include type from package instead...
 interface Component {
   pascalName: string
   kebabName: string

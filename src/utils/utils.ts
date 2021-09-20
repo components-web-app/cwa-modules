@@ -78,3 +78,19 @@ export function getProp(holder, propName) {
 
   return result
 }
+
+// fastest https://medium.com/@jakubsynowiec/unique-array-values-in-javascript-7c932682766c
+export function UnqiueArray(array) {
+  const length = array.length
+  const result = []
+  const seen = new Set()
+  for (let index = 0; index < length; index++) {
+    const value = array[index]
+    if (seen.has(value)) {
+      continue
+    }
+    seen.add(value)
+    result.push(value)
+  }
+  return result
+}
