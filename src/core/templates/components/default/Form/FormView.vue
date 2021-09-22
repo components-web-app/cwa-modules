@@ -51,4 +51,5 @@ export default Vue.extend({
     padding: 1rem
     background: $cwa-grid-item-background
     color: $cwa-color-text-light
+    margin-bottom: 1.5rem
 </style>

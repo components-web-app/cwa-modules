@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import consola from 'consola'
-import { resourcesState, StoreCategories } from '@cwa/nuxt-module/core/storage'
+import { resourcesState, StoreCategories } from '../storage'
 
 export default function (storage) {
   return {
