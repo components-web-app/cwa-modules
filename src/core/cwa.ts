@@ -76,7 +76,6 @@ export default class Cwa {
 
     if (process.client) {
       this.initMercure()
-      this.initConfirm()
     }
   }
 
@@ -479,6 +478,4 @@ export default class Cwa {
   isResourceSame(resource1, resource2): boolean {
     return this.$storage.isResourceSame(resource1, resource2)
   }
-
-  private initConfirm() {}
 }

@@ -3,23 +3,28 @@
     <component
       :is="formViewComponent"
       v-bind="formViewProps"
-      :form-view="formView"
+      :view-data="viewData"
     >
-      <div v-if="formViewComponent === 'div'" class="cwa-form-view-not-found">
-        <p class="has-color-primary">Form View Block Not Found</p>
-        <p>Searched:</p>
-        <pre>{{ pascalBlockPrefixes }}</pre>
-        <p>Excluded:</p>
-        <pre>{{ excludeComponents }}</pre>
-        <p>Available:</p>
-        <pre>{{ formViewComponents }}</pre>
-      </div>
-      <form-view
-        v-for="childFormView of formView.children"
-        :key="childFormView['@id']"
-        v-bind="formViewProps"
-        :form-view="childFormView"
-      />
+      <template v-if="formViewComponent === 'div'">
+        <div class="cwa-form-view-not-found">
+          <p class="has-color-primary">Form View Block Not Found</p>
+          <p>Searched:</p>
+          <pre>{{ blockPrefixComponents }}</pre>
+          <p>Excluded:</p>
+          <pre>{{ excludeComponents }}</pre>
+          <p>Available:</p>
+          <pre>{{ formViewComponents }}</pre>
+        </div>
+      </template>
+      <template #default="{ viewData }">
+        <form-view
+          v-for="childViewName of formView.children"
+          :key="`${formViewPath.join('-')}//${childViewName}`"
+          v-bind="formViewProps"
+          :form-view-path="getChildFormViewPath(childViewName)"
+          :view-data="viewData"
+        />
+      </template>
     </component>
   </div>
 </template>

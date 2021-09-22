@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form :action="vars.action">
     <slot></slot>
     <span class="help">* required</span>
   </form>
@@ -10,6 +10,8 @@ import Vue from 'vue'
 import FormViewBlockMixin from '@cwa/nuxt-module/core/mixins/FormViewBlockMixin'
 
 export default Vue.extend({
-  mixins: [FormViewBlockMixin]
+  mixins: [FormViewBlockMixin],
+  // prevent unnecessary call to initialise this as a form view
+  created() {}
 })
 </script>

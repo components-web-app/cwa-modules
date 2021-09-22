@@ -1,16 +1,9 @@
 import Vue from 'vue'
 import FormViewPropsMixin from './FormViewPropsMixin'
 
-export interface FormViewInterface {}
-
 export default Vue.extend({
   mixins: [FormViewPropsMixin],
   computed: {
-    localFormView() {
-      const comp = Object.assign({}, this.formView)
-      delete comp.children
-      return comp
-    },
     pascalBlockPrefixes() {
       const snakeToPascal = (str) => {
         const pascal = str.replace(/([-_][a-z])/gi, (match) => {
@@ -19,19 +12,15 @@ export default Vue.extend({
         return `${pascal.charAt(0).toUpperCase()}${pascal.substr(1)}`
       }
 
-      return this.vars.block_prefixes
-        .filter((bp) => {
-          return (
-            bp !== this.vars.full_name && bp !== this.vars.unique_block_prefix
-          )
-        })
-        .map((str) => snakeToPascal(str))
+      return this.blockPrefixes.map((str) => snakeToPascal(str))
     },
     blockPrefixComponents() {
       return this.pascalBlockPrefixes.map((name) => `CwaForm${name}`)
     },
     formViewComponents() {
-      return Object.keys(this.$options.components)
+      return Object.keys(this.$options.components).filter((name) =>
+        name.startsWith('CwaForm')
+      )
     },
     formViewComponent() {
       let component = 'div'
@@ -45,6 +34,11 @@ export default Vue.extend({
       }
 
       return component
+    }
+  },
+  methods: {
+    getChildFormViewPath(childViewName) {
+      return [...this.formViewPath, 'children', childViewName]
     }
   }
 })
