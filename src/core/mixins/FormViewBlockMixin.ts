@@ -54,6 +54,13 @@ export default Vue.extend({
           (!submitting && this.vars.valid === false && this.displayErrors),
         'is-valid': !submitting && this.vars.valid
       }
+    },
+    wrapperProps() {
+      return {
+        vars: this.vars,
+        metadata: this.metadata,
+        displayErrors: this.displayErrors
+      }
     }
   },
   watch: {

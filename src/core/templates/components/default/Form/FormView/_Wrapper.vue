@@ -5,8 +5,8 @@
         v-if="vars.label"
         v-bind="vars.label_attr"
         :class="{ 'is-required': vars.required }"
-        >{{ vars.label }}</label
-      >
+        v-html="vars.label"
+      />
     </slot>
     <slot name="default"></slot>
     <slot name="errors">

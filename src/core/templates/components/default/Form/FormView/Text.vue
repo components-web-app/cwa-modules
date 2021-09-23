@@ -1,5 +1,5 @@
 <template>
-  <wrapper :vars="vars" :metadata="metadata" :display-errors="displayErrors">
+  <wrapper v-bind="wrapperProps">
     <input
       v-if="inputType === 'number'"
       v-model.number="value"

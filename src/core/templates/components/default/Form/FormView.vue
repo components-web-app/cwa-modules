@@ -38,6 +38,8 @@ export default Vue.extend({
   components: {
     CwaFormForm: () => import('./FormView/Form.vue'),
     CwaFormText: () => import('./FormView/Text.vue'),
+    CwaFormChoice: () => import('./FormView/Choice.vue'),
+    CwaFormCheckbox: () => import('./FormView/Checkbox.vue'),
     CwaFormRepeated: () => import('./FormView/Repeated.vue'),
     CwaFormSubmit: () => import('./FormView/Submit.vue')
   },
