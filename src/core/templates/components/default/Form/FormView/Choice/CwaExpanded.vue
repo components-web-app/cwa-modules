@@ -9,7 +9,7 @@
           :id="`${vars.id}-choice-${index}`"
           v-model="value"
           :value="choice.value"
-          type="checkbox"
+          :type="inputType"
           @change="validate"
         />
         <span>
@@ -25,6 +25,11 @@ import Vue from 'vue'
 import FormViewBlockMixin from '@cwa/nuxt-module/core/mixins/FormViewBlockMixin'
 
 export default Vue.extend({
-  mixins: [FormViewBlockMixin]
+  mixins: [FormViewBlockMixin],
+  computed: {
+    inputType() {
+      return this.vars.multiple ? 'checkbox' : 'radio'
+    }
+  }
 })
 </script>

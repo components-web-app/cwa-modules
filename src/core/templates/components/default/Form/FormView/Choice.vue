@@ -3,11 +3,8 @@
     <div v-if="!vars.expanded">
       <cwa-select v-bind="$props" />
     </div>
-    <div v-else-if="vars.multiple">
-      <cwa-checkboxes v-bind="$props" />
-    </div>
     <div v-else>
-      <cwa-radios v-bind="$props" />
+      <cwa-expanded v-bind="$props" />
     </div>
   </wrapper>
 </template>
@@ -19,13 +16,9 @@ import Wrapper from '@cwa/nuxt-module/core/templates/components/default/Form/For
 
 export default Vue.extend({
   components: {
-    CwaRadios: () =>
+    CwaExpanded: () =>
       import(
-        '@cwa/nuxt-module/core/templates/components/default/Form/FormView/Choice/CwaRadios.vue'
-      ),
-    CwaCheckboxes: () =>
-      import(
-        '@cwa/nuxt-module/core/templates/components/default/Form/FormView/Choice/CwaCheckboxes.vue'
+        '@cwa/nuxt-module/core/templates/components/default/Form/FormView/Choice/CwaExpanded.vue'
       ),
     CwaSelect: () =>
       import(
