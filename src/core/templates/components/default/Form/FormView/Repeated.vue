@@ -1,6 +1,6 @@
 <template>
   <div>
-    <slot></slot>
+    <slot :viewData="{ repeatedChildren: formView.children }"></slot>
   </div>
 </template>
 

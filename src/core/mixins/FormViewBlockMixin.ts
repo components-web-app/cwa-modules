@@ -1,5 +1,8 @@
 import Vue from 'vue'
-import { FormView } from '@cwa/nuxt-module/core/vuex/FormsVuexModule'
+import {
+  FormExtraSubmitData,
+  FormView
+} from '@cwa/nuxt-module/core/vuex/FormsVuexModule'
 import _debounce from 'lodash.debounce'
 import consola from 'consola'
 import FormViewPropsMixin from './FormViewPropsMixin'
@@ -56,10 +59,16 @@ export default Vue.extend({
   watch: {
     value(newValue) {
       this.$emit('input', newValue)
+    },
+    displayErrors: {
+      immediate: true,
+      handler(newValue) {
+        this.$cwa.forms.setDisplayErrors(this.storeId, newValue)
+      }
     }
   },
   methods: {
-    validate(delay) {
+    validate(delay, extraData: FormExtraSubmitData[] = null) {
       return new Promise((resolve, reject) => {
         if (this.validatingDebouncedFn) {
           this.validatingDebouncedFn.resolve('Cancelled')
@@ -71,7 +80,7 @@ export default Vue.extend({
           call: _debounce(
             async () => {
               try {
-                resolve(await this.$cwa.forms.validate(this.storeId))
+                resolve(await this.$cwa.forms.validate(this.storeId, extraData))
               } catch (error) {
                 reject(error)
               }

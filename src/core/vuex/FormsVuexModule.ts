@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import consola from 'consola'
 import _get from 'lodash.get'
+import _set from 'lodash.set'
 // import _merge from 'lodash.merge'
 import _cloneDeep from 'lodash.clonedeep'
 import axios, { CancelTokenSource } from 'axios'
@@ -40,6 +41,7 @@ export interface ViewMetadata {
     submitting: boolean
     errored: boolean
     cancelToken?: CancelTokenSource
+    displayErrors?: boolean
   }
   [key: string]: any
 }
@@ -50,6 +52,12 @@ export interface FormView {
     [key: string]: FormView
   }
   metadata: ViewMetadata
+}
+
+export interface FormExtraSubmitData {
+  path: string[]
+  value: any
+  fakeValue?: boolean
 }
 
 export default {
@@ -112,7 +120,13 @@ export default {
       )
     },
     // updates the form view vars from submitted form views using the API Component returned during validation
-    update(state, { component }) {
+    update(
+      state,
+      { component, synthesised }: { component: any; synthesised?: string[][] }
+    ) {
+      const synthAsJson = synthesised
+        ? synthesised.map((arr) => JSON.stringify(arr))
+        : []
       const root = state[component['@id']]
       if (!root) {
         consola.warn(
@@ -129,7 +143,10 @@ export default {
 
       const getFormViewData = (formView, currentPath) => {
         currentPath = [...currentPath, formView.vars.full_name]
-        if (formView.vars.submitted) {
+        if (
+          formView.vars.submitted &&
+          !synthAsJson.includes(JSON.stringify(currentPath))
+        ) {
           const currentView = _get(root, currentPath)
           Vue.set(currentView, 'vars', formView.vars)
         }
@@ -217,14 +234,15 @@ export default {
     //   }
   },
   actions: {
-    async validate({ commit, state }, { formId, path }) {
-      const formAction = state[formId].vars.action
-      const formView: FormView = _get(state[formId], path)
-      const value = formView.metadata.value
-      if (value === formView.metadata.validation.lastValue) {
-        return
-      }
-
+    async validate(
+      { commit, state },
+      {
+        formId,
+        path,
+        extraData
+      }: { formId: string; path: string; extraData: FormExtraSubmitData[] }
+    ) {
+      // local/private function declarations
       const setValidationData = (key, value) => {
         commit('setMetadata', {
           formId,
@@ -234,31 +252,44 @@ export default {
           value
         })
       }
+
+      const setSubmitVar = (path, forceValue = undefined) => {
+        const submitPath = this.$cwa.forms.convertPathToSubmitPath({
+          formId,
+          path
+        })
+        const setValue = forceValue !== undefined ? forceValue : value
+        _set(submitObj, submitPath, setValue)
+      }
+
+      const formAction = state[formId].vars.action
+      const formView: FormView = _get(state[formId], path)
+      const value = formView.metadata.value
+
+      // skip if we have already got a pending/complete validation for this value
+      if (value === formView.metadata.validation.lastValue) {
+        return
+      }
+      setValidationData('lastValue', value)
+
+      // cancel previous request and create new token
       if (formView.metadata.validation.cancelToken) {
         formView.metadata.validation.cancelToken.cancel()
       }
       const cancelToken = axios.CancelToken.source()
+      setValidationData('cancelToken', cancelToken)
 
       setValidationData('submitting', true)
-      setValidationData('cancelToken', cancelToken)
-      setValidationData('lastValue', value)
       setValidationData('errored', false)
 
-      // const objPath = [state[formId].vars.full_name, ...path]
-      let stateObj = state[formId]
-      let lastNestedValue = {}
       const submitObj = {
-        [state[formId].vars.full_name]: lastNestedValue
+        [state[formId].vars.full_name]: {}
       }
-      for (const name of path) {
-        stateObj = stateObj[name]
-        if (name === 'children') {
-          continue
+      setSubmitVar(path)
+      if (extraData) {
+        for (const submitData of extraData) {
+          setSubmitVar(submitData.path, submitData.value)
         }
-        const nestedValue =
-          stateObj.vars.full_name === formView.vars.full_name ? value : {}
-        lastNestedValue[stateObj.vars.name] = nestedValue
-        lastNestedValue = nestedValue
       }
 
       try {
@@ -268,16 +299,21 @@ export default {
             return [422, 200].includes(status)
           }
         })
-        commit('update', { component: data })
+        commit('update', {
+          component: data,
+          synthesised: extraData
+            .filter((ed) => ed.fakeValue === true)
+            .map((d) => d.path)
+        })
+        setValidationData('submitting', false)
       } catch (error) {
         if (axios.isCancel(error)) {
           return
         }
         setValidationData('errored', true)
+        setValidationData('submitting', false)
         consola.error(error)
       }
-
-      setValidationData('submitting', false)
     }
   }
 }

@@ -27,6 +27,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import Wrapper from '@cwa/nuxt-module/core/templates/components/default/Form/FormView/_Wrapper.vue'
+import {
+  FormExtraSubmitData,
+  FormView
+} from '@cwa/nuxt-module/core/vuex/FormsVuexModule'
 import FormViewBlockMixin from '../../../../../mixins/FormViewBlockMixin'
 
 export default Vue.extend({
@@ -41,8 +45,8 @@ export default Vue.extend({
     events() {
       return {
         blur: this.inputBlur,
-        'keypress.enter': this.validate,
-        keyup: this.validate
+        'keypress.enter': this.validateText,
+        keyup: this.validateText
       }
     },
     lastBlockPrefix() {
@@ -71,19 +75,88 @@ export default Vue.extend({
         return this.lastBlockPrefix
       }
       return 'text'
+    },
+    otherRepeatedViewPath() {
+      const repeatedChildren = this.viewData?.repeatedChildren
+      if (!repeatedChildren) {
+        return null
+      }
+      const otherPath = repeatedChildren.filter(
+        (fullName) => fullName !== this.vars.full_name
+      )[0]
+      const otherFullPath = this.formViewPath.slice(0, -1)
+      otherFullPath.push(otherPath)
+      return otherFullPath
     }
   },
   watch: {
     'vars.valid'(newValue) {
-      if (newValue === true) {
+      // for a repeated input, the second input will be synthesised but we do not want that input
+      // to start displaying errors
+      if (newValue === true && this.vars.name !== 'second') {
         this.displayErrors = true
       }
+    },
+    'metadata.validation.displayErrors'(newValue) {
+      this.displayErrors = newValue
     }
   },
   methods: {
     async inputBlur() {
-      await this.validate(0)
+      await this.validateText(0)
       this.displayErrors = true
+      if (this.vars.name === 'second' && this.otherRepeatedViewPath) {
+        this.$cwa.forms.setDisplayErrors(
+          {
+            formId: this.formId,
+            path: this.otherRepeatedViewPath
+          },
+          this.displayErrors
+        )
+      }
+    },
+    validateText(delay) {
+      if (!this.otherRepeatedViewPath) {
+        this.validate(delay)
+      }
+      this.validateRepeated(delay)
+    },
+    validateRepeated(delay) {
+      // expect 'first' or 'second' for repeated input
+      const shortName = this.vars.name
+      const otherView: FormView = this.$cwa.forms.getView({
+        formId: this.formId,
+        path: this.otherRepeatedViewPath
+      })
+      const otherValue = otherView.metadata.value
+
+      const extraData: FormExtraSubmitData[] = []
+      // if it is the first, should we be mocking the second to match the value?
+      if (shortName === 'first') {
+        // simulate second input
+        const submitOtherValue = otherValue || this.value
+        extraData.push({
+          path: this.otherRepeatedViewPath,
+          value: submitOtherValue,
+          fakeValue: otherValue === ''
+        })
+      } else {
+        // submit first input too. THe first input will already be displaying errors
+        // so we want to prevent showing non-matching password until blurred
+        extraData.push({
+          path: this.otherRepeatedViewPath,
+          value: otherValue
+        })
+        this.$cwa.forms.setDisplayErrors(
+          {
+            formId: this.formId,
+            path: this.otherRepeatedViewPath
+          },
+          this.displayErrors
+        )
+      }
+
+      this.validate(delay, extraData)
     }
   }
 })

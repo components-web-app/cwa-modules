@@ -1,7 +1,12 @@
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { Store } from 'vuex'
 import _get from 'lodash.get'
-import FormsVuexModule, { ViewMetadata, ViewVars } from './vuex/FormsVuexModule'
+import FormsVuexModule, {
+  FormExtraSubmitData,
+  FormView,
+  ViewMetadata,
+  ViewVars
+} from './vuex/FormsVuexModule'
 
 export interface FormViewId {
   formId: string
@@ -72,6 +77,14 @@ export default class Forms {
     this.setMetadata(id, { key: 'value', value })
   }
 
+  setDisplayErrors(id: FormViewId, value: boolean) {
+    this.setMetadata(id, {
+      metadataPath: ['validation'],
+      key: 'displayErrors',
+      value
+    })
+  }
+
   setMetadata(
     { formId, path }: FormViewId,
     {
@@ -89,11 +102,46 @@ export default class Forms {
     })
   }
 
-  async validate({ formId, path }: FormViewId) {
+  async validate(
+    { formId, path }: FormViewId,
+    extraData: FormExtraSubmitData[] = null
+  ) {
     await this.ctx.store.dispatch(`${this.namespacePrefix}/validate`, {
       formId,
-      path
+      path,
+      extraData
     })
+  }
+
+  convertPathToSubmitPath({ formId, path }: FormViewId) {
+    const partPath = []
+    return path.reduce(
+      (setPath, name) => {
+        partPath.push(name)
+        if (name !== 'children') {
+          const currentFormView: FormView = _get(this.state[formId], partPath)
+          setPath.push(currentFormView.vars.name)
+
+          // const bps = currentFormView.vars.block_prefixes
+          // const isRepeated = bps[bps.length - 2] === 'repeated'
+          // if (isRepeated) {
+          //   const repeatedChildren = Object.keys(
+          //     currentFormView.children
+          //   ).filter((childName) => childName !== formView.vars.full_name)
+          //   for (const repeatedChild of repeatedChildren) {
+          //     const childPath = [...partPath, 'children', repeatedChild]
+          //     setSubmitVar(
+          //       childPath,
+          //       true,
+          //       repeatedChild.endsWith('[second]') ? value : undefined
+          //     )
+          //   }
+          // }
+        }
+        return setPath
+      },
+      [this.state[formId].vars.full_name]
+    )
   }
 
   // setFormMetadata(formId, key, value) {
