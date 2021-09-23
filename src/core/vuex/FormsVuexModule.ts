@@ -302,8 +302,8 @@ export default {
         commit('update', {
           component: data,
           synthesised: extraData
-            .filter((ed) => ed.fakeValue === true)
-            .map((d) => d.path)
+            ? extraData.filter((ed) => ed.fakeValue === true).map((d) => d.path)
+            : null
         })
         setValidationData('submitting', false)
       } catch (error) {
