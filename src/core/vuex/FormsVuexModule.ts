@@ -264,7 +264,10 @@ export default {
 
       const formAction = state[formId].vars.action
       const formView: FormView = _get(state[formId], path)
-      const value = formView.metadata.value
+      const value =
+        'checked' in formView.metadata
+          ? formView.metadata.checked
+          : formView.metadata.value
 
       // skip if we have already got a pending/complete validation for this value
       if (value === formView.metadata.validation.lastValue) {

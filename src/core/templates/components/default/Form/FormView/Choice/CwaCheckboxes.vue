@@ -1,5 +1,23 @@
 <template>
-  <div><input type="checkbox" /></div>
+  <div :class="classNames" v-bind="inputAttr">
+    <div
+      v-for="(choice, index) of vars.choices"
+      :key="`${vars.id}-choice-${index}`"
+    >
+      <label :for="`${vars.id}-choice-${index}`" v-bind="choice.attr">
+        <input
+          :id="`${vars.id}-choice-${index}`"
+          v-model="value"
+          :value="choice.value"
+          type="checkbox"
+          @change="validate"
+        />
+        <span>
+          {{ choice.label }}
+        </span>
+      </label>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">

@@ -77,6 +77,10 @@ export default class Forms {
     this.setMetadata(id, { key: 'value', value })
   }
 
+  setChecked(id: FormViewId, value: any) {
+    this.setMetadata(id, { key: 'value', value })
+  }
+
   setDisplayErrors(id: FormViewId, value: boolean) {
     this.setMetadata(id, {
       metadataPath: ['validation'],
