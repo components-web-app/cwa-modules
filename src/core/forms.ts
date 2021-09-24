@@ -73,6 +73,13 @@ export default class Forms {
     }
   }
 
+  public addChildView(id: FormViewId, formView: FormView) {
+    this.ctx.store.commit(`${this.namespacePrefix}/addChildView`, {
+      ...id,
+      formView
+    })
+  }
+
   setValue(id: FormViewId, value: any) {
     this.setMetadata(id, { key: 'value', value })
   }
@@ -125,59 +132,10 @@ export default class Forms {
         if (name !== 'children') {
           const currentFormView: FormView = _get(this.state[formId], partPath)
           setPath.push(currentFormView.vars.name)
-
-          // const bps = currentFormView.vars.block_prefixes
-          // const isRepeated = bps[bps.length - 2] === 'repeated'
-          // if (isRepeated) {
-          //   const repeatedChildren = Object.keys(
-          //     currentFormView.children
-          //   ).filter((childName) => childName !== formView.vars.full_name)
-          //   for (const repeatedChild of repeatedChildren) {
-          //     const childPath = [...partPath, 'children', repeatedChild]
-          //     setSubmitVar(
-          //       childPath,
-          //       true,
-          //       repeatedChild.endsWith('[second]') ? value : undefined
-          //     )
-          //   }
-          // }
         }
         return setPath
       },
       [this.state[formId].vars.full_name]
     )
   }
-
-  // setFormMetadata(formId, key, value) {
-  //   this.ctx.store.commit(`${this.namespacePrefix}/setFormMetadata`, {
-  //     formId,
-  //     key,
-  //     value
-  //   })
-  //
-  //   return value
-  // }
-  //
-  // setViewMetadata(formId, name, key, value) {
-  //   this.ctx.store.commit(`${this.namespacePrefix}/setViewMetadata`, {
-  //     formId,
-  //     name,
-  //     key,
-  //     value
-  //   })
-  //
-  //   return value
-  // }
-  //
-  // setViewVar(formId, name, key, value) {
-  //   this.ctx.store.commit(`${this.namespacePrefix}/setViewVar`, {
-  //     formId,
-  //     name,
-  //     key,
-  //     value
-  //   })
-  //
-  //   return value
-  // }
-  //
 }

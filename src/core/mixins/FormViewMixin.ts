@@ -3,6 +3,13 @@ import FormViewPropsMixin from './FormViewPropsMixin'
 
 export default Vue.extend({
   mixins: [FormViewPropsMixin],
+  props: {
+    appliedChildProxy: {
+      type: String,
+      required: false,
+      default: null
+    }
+  },
   computed: {
     pascalBlockPrefixes() {
       const snakeToPascal = (str) => {

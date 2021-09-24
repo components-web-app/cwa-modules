@@ -116,8 +116,9 @@ export default Vue.extend({
       }
     },
     validateText(delay) {
-      if (!this.otherRepeatedViewPath) {
+      if (this.otherRepeatedViewPath === null) {
         this.validate(delay)
+        return
       }
       this.validateRepeated(delay)
     },

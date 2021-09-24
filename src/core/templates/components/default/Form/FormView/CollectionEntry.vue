@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <slot :viewData="{ repeatedChildren: formView.children }"></slot>
+  <div class="row">
+    <div class="column">
+      <slot :child-proxy="null"></slot>
+    </div>
+    <div class="column is-narrow">Delete</div>
   </div>
 </template>
 

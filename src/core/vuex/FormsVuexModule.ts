@@ -158,30 +158,22 @@ export default {
       // but the action will not be populated and is not relevant anyway for validating a field
 
       loopChildren(component.formView.children, [])
+    },
+    addChildView(
+      state,
+      {
+        formId,
+        path,
+        formView
+      }: {
+        formId: string
+        path: string
+        formView: FormView
+      }
+    ) {
+      const setObject = _get(state[formId], path).children
+      Vue.set(setObject, formView.vars.full_name, formView)
     }
-    // initView(state, { formId, formView }) {
-    //   // left for reference when making the checkbox component - should be done there
-    //   if (
-    //     formView.vars.block_prefixes[1] === 'checkbox' &&
-    //     !formView.vars.multiple
-    //   ) {
-    //     value = formView.vars.checked
-    //   } else {
-    //     value = formView.vars.value
-    //     if (formView.vars.multiple) {
-    //       value = Object.values(value)
-    //     }
-    //   }
-    //
-    //   // For reference from CWA v1 - need to look at what this is doing and how we pass inputType and children as
-    //   // function parameters
-    //   // inputData.prototype = inputType === 'collection' ? children[0] : null
-    //   // if (inputData.vars.expanded) {
-    //   //   inputData.children = children
-    //   // } else if (inputType === 'collection') {
-    //   //   inputData.children = {}
-    //   // }
-    // }
   },
   getters: {
     // getFormSubmitData: (state, getters) => (formId) => {
@@ -209,29 +201,7 @@ export default {
     //     form.extraData,
     //     getDeepFormData(form.data)
     //   )
-    // },
-    // getInputSubmitData:
-    //   (state) =>
-    //   ({ formId, name }) => {
-    //     // collections are tricky, leave this in for reference when dealing with them
-    //     // If a collection, we want to ensure the other array values are not null otherwise API will validate
-    //     // as the first entry always
-    //     for (const [partIndex, partKey] of searchResult.entries()) {
-    //       const keyAsNumber = partKey / 1
-    //       if (!isNaN(keyAsNumber) && Number.isInteger(keyAsNumber)) {
-    //         let countdown = partKey - 1
-    //         while (countdown >= 0) {
-    //           const newSearchResult = searchResult
-    //           newSearchResult[partIndex] = countdown
-    //           newSearchResult.length = partIndex + 1
-    //           _set(submitObj, newSearchResult, {})
-    //           countdown--
-    //         }
-    //       }
-    //     }
-    //
-    //     return submitObj
-    //   }
+    // }
   },
   actions: {
     async validate(

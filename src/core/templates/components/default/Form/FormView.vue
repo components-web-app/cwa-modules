@@ -1,7 +1,7 @@
 <template>
   <div class="cwa-form-view">
     <component
-      :is="formViewComponent"
+      :is="appliedChildProxy || formViewComponent"
       v-bind="formViewProps"
       :view-data="viewData"
     >
@@ -16,13 +16,20 @@
           <pre>{{ formViewComponents }}</pre>
         </div>
       </template>
-      <template #default="{ viewData }">
+      <template #default="{ viewData, childProxy }">
         <form-view
-          v-for="childViewName of formView.children"
+          v-if="appliedChildProxy && appliedChildProxy !== formViewComponent"
+          v-bind="$props"
+          :applied-child-proxy="null"
+        />
+        <form-view
+          v-for="childViewName of children"
+          v-else
           :key="`${formViewPath.join('-')}//${childViewName}`"
           v-bind="formViewProps"
           :form-view-path="getChildFormViewPath(childViewName)"
           :view-data="viewData"
+          :applied-child-proxy="childProxy"
         />
       </template>
     </component>
@@ -41,9 +48,19 @@ export default Vue.extend({
     CwaFormChoice: () => import('./FormView/Choice.vue'),
     CwaFormCheckbox: () => import('./FormView/Checkbox.vue'),
     CwaFormRepeated: () => import('./FormView/Repeated.vue'),
+    CwaFormCollectionEntry: () => import('./FormView/CollectionEntry.vue'),
+    CwaFormCollection: () => import('./FormView/Collection.vue'),
     CwaFormSubmit: () => import('./FormView/Submit.vue')
   },
-  mixins: [FormViewMixin]
+  mixins: [FormViewMixin],
+  computed: {
+    children() {
+      if (this.blockPrefixes.includes('collection')) {
+        return this.formView.children.slice(1)
+      }
+      return this.formView.children
+    }
+  }
 })
 </script>
 
