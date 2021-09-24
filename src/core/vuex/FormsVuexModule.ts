@@ -2,7 +2,7 @@ import Vue from 'vue'
 import consola from 'consola'
 import _get from 'lodash.get'
 import _set from 'lodash.set'
-// import _merge from 'lodash.merge'
+import _merge from 'lodash.merge'
 import _cloneDeep from 'lodash.clonedeep'
 import axios, { CancelTokenSource } from 'axios'
 
@@ -148,7 +148,7 @@ export default {
           !synthAsJson.includes(JSON.stringify(currentPath))
         ) {
           const currentView = _get(root, currentPath)
-          Vue.set(currentView, 'vars', formView.vars)
+          Vue.set(currentView, 'vars', _merge(currentView.vars, formView.vars))
         }
 
         loopChildren(formView.children, currentPath)
