@@ -2,7 +2,6 @@ import Vue from 'vue'
 import consola from 'consola'
 import _get from 'lodash.get'
 import _set from 'lodash.set'
-import _merge from 'lodash.merge'
 import _cloneDeep from 'lodash.clonedeep'
 import axios, { CancelTokenSource } from 'axios'
 
@@ -150,7 +149,10 @@ export default {
           const currentView = _get(root, currentPath)
           // patching collections   does not return all vars, does not return label for text input collections
           // so do not trust full vars returned and merge with the existing vars
-          Vue.set(currentView, 'vars', _merge(currentView.vars, formView.vars))
+          Vue.set(currentView, 'vars', {
+            ...currentView.vars,
+            ...formView.vars
+          })
         }
 
         loopChildren(formView.children, currentPath)

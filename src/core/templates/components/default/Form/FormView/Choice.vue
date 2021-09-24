@@ -26,6 +26,11 @@ export default Vue.extend({
       ),
     Wrapper
   },
-  mixins: [FormViewBlockMixin]
+  mixins: [FormViewBlockMixin],
+  data() {
+    return {
+      displayErrors: true
+    }
+  }
 })
 </script>

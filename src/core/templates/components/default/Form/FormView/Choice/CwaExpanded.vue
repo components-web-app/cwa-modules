@@ -26,6 +26,11 @@ import FormViewBlockMixin from '@cwa/nuxt-module/core/mixins/FormViewBlockMixin'
 
 export default Vue.extend({
   mixins: [FormViewBlockMixin],
+  data() {
+    return {
+      displayErrors: true
+    }
+  },
   computed: {
     inputType() {
       return this.vars.multiple ? 'checkbox' : 'radio'
