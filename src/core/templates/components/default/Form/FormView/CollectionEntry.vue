@@ -1,9 +1,8 @@
 <template>
-  <div class="row">
+  <div class="cwa-collection-entry row">
     <div class="column">
-      <slot :child-proxy="null"></slot>
+      <slot :child-proxy="'CwaFormCollectionEntryText'"></slot>
     </div>
-    <div class="column is-narrow">Delete</div>
   </div>
 </template>
 

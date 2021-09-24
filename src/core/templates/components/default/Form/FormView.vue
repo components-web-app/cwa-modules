@@ -20,7 +20,7 @@
         <form-view
           v-if="appliedChildProxy && appliedChildProxy !== formViewComponent"
           v-bind="$props"
-          :applied-child-proxy="null"
+          :applied-child-proxy="childProxy"
         />
         <form-view
           v-for="childViewName of children"
@@ -50,6 +50,8 @@ export default Vue.extend({
     CwaFormRepeated: () => import('./FormView/Repeated.vue'),
     CwaFormCollectionEntry: () => import('./FormView/CollectionEntry.vue'),
     CwaFormCollection: () => import('./FormView/Collection.vue'),
+    CwaFormCollectionEntryText: () =>
+      import('./FormView/CollectionEntryText.vue'),
     CwaFormSubmit: () => import('./FormView/Submit.vue')
   },
   mixins: [FormViewMixin],

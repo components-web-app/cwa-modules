@@ -54,7 +54,7 @@ export default class Forms {
     this.ctx.store.commit(`${this.namespacePrefix}/init`, { component })
   }
 
-  public getView({ formId, path }: { formId: string; path?: string[] }) {
+  public getView({ formId, path }: FormViewId) {
     const getRawView = () => {
       if (!path || !path.length) {
         return this.state[formId] || {}
@@ -78,6 +78,10 @@ export default class Forms {
       ...id,
       formView
     })
+  }
+
+  public deleteView(id: FormViewId) {
+    this.ctx.store.commit(`${this.namespacePrefix}/deleteView`, id)
   }
 
   setValue(id: FormViewId, value: any) {

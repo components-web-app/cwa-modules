@@ -148,6 +148,8 @@ export default {
           !synthAsJson.includes(JSON.stringify(currentPath))
         ) {
           const currentView = _get(root, currentPath)
+          // patching collections   does not return all vars, does not return label for text input collections
+          // so do not trust full vars returned and merge with the existing vars
           Vue.set(currentView, 'vars', _merge(currentView.vars, formView.vars))
         }
 
@@ -173,6 +175,9 @@ export default {
     ) {
       const setObject = _get(state[formId], path).children
       Vue.set(setObject, formView.vars.full_name, formView)
+    },
+    deleteView(state, { formId, path }) {
+      Vue.delete(_get(state[formId], path.slice(0, -1)), path[path.length - 1])
     }
   },
   getters: {
