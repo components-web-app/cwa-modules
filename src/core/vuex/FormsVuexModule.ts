@@ -209,6 +209,34 @@ export default {
     // }
   },
   actions: {
+    async submit({ state, commit }, { formId, path }) {
+      const setValidationData = (key, value) => {
+        commit('setMetadata', {
+          formId,
+          path,
+          metadataPath: ['validation'],
+          key,
+          value
+        })
+      }
+
+      setValidationData('submitting', true)
+
+      const formAction = state[formId].vars.action
+      const { data } = await this.$axios.patch(
+        formAction,
+        {},
+        {
+          cancelToken: null,
+          validateStatus(status) {
+            return [422, 200].includes(status)
+          }
+        }
+      )
+      console.log(data)
+
+      setValidationData('submitting', false)
+    },
     async validate(
       { commit, state },
       {

@@ -142,4 +142,8 @@ export default class Forms {
       [this.state[formId].vars.full_name]
     )
   }
+
+  async submit(id: FormViewId) {
+    await this.ctx.store.dispatch(`${this.namespacePrefix}/submit`, id)
+  }
 }
