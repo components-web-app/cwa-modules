@@ -1,0 +1,16 @@
+{
+  "name": "repro/coverage-bug",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "vitest --run --reporter verbose",
+    "test:watch": "vitest --watch --reporter verbose",
+    "test:watch:coverage": "vitest --watch --coverage --reporter verbose",
+    "test:coverage": "vitest --run --coverage"
+  },
+  "devDependencies": {
+    "@vitest/coverage-c8": "^0.25.6",
+    "vitest": "^0.25.4"
+  }
+}
