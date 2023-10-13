@@ -3,7 +3,7 @@ This file is auto-generate by a github hook please modify README.template.md if 
 -->
 # CWA Nuxt 3 Module (in development)
 
-[![codecov](https://codecov.io/github/components-web-app/cwa-nuxt-module/branch/feat/manager-tabs/graph/badge.svg?token=Z6GQJN413O)](https://app.codecov.io/gh/components-web-app/cwa-nuxt-module/tree/feat/manager-tabs)
+[![codecov](https://codecov.io/github/components-web-app/cwa-nuxt-module/branch/bug/loadAndTransform/graph/badge.svg?token=Z6GQJN413O)](https://app.codecov.io/gh/components-web-app/cwa-nuxt-module/tree/bug/loadAndTransform)
 
 This module is designed to work with the [API Component Bundle](https://github.com/components-web-app/api-components-bundle) and will provide a full user-interface and utilities to easily create custom web apps with an advanced in-line content management system
 
@@ -33,6 +33,6 @@ We have built in testing using `vitest`.
 - To run tests in watch mode during development run `pnpm run test:watch`
 - If you want to check coverage updates at the same time as watching for file changes you can run `pnpm run test:watch:coverage`
 
-## Test coverage for branch `feat/manager-tabs`
+## Test coverage for branch `bug/loadAndTransform`
 
-![Codecov sunburst image](https://codecov.io/github/components-web-app/cwa-nuxt-module/branch/feat/manager-tabs/graphs/sunburst.svg?token=Z6GQJN413O)
+![Codecov sunburst image](https://codecov.io/github/components-web-app/cwa-nuxt-module/branch/bug/loadAndTransform/graphs/sunburst.svg?token=Z6GQJN413O)

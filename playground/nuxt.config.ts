@@ -5,11 +5,7 @@ const API_URL = process.env.API_URL || 'https://localhost:8443'
 const API_URL_BROWSER = process.env.API_URL_BROWSER || API_URL
 
 export default defineNuxtConfig({
-  extends: [
-    '../src/layer'
-  ],
   modules: [
-    CwaModule,
     '@nuxtjs/tailwindcss',
     '@nuxt/image-edge',
     '@nuxt/devtools',
