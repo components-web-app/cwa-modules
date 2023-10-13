@@ -23,7 +23,7 @@
   "scripts": {
     "prepack": "nuxt-module-build && sleep 0.2 && npm run copy-layer",
     "copy-layer": "copyfiles -u 1 \"./src/layer/**\" dist/",
-    "dev": "concurrently --kill-others \"pnpm postcss:watch\" \"pnpm dev:https\"",
+    "dev": "pnpm dev:https",
     "dev:https": "nuxi dev playground --https",
     "dev:http": "nuxi dev playground",
     "dev:build": "nuxi build playground",
