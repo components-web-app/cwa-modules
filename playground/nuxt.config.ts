@@ -6,11 +6,7 @@ const API_URL_BROWSER = process.env.API_URL_BROWSER || API_URL
 
 export default defineNuxtConfig({
   modules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxt/image-edge',
-    '@nuxt/devtools',
-    'nuxt-vitest',
-    '@vite-pwa/nuxt'
+    '@nuxtjs/tailwindcss'
   ],
   cwa: {
     apiUrl: API_URL,

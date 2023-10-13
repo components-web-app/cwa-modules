@@ -1,18 +1,7 @@
-import { join } from 'path'
-import path from 'node:path'
-import { statSync } from 'node:fs'
-import _mergeWith from 'lodash/mergeWith.js'
-import _isArray from 'lodash/isArray.js'
 import {
-  addImportsDir,
-  addPlugin,
-  addTemplate,
-  createResolver,
-  defineNuxtModule,
-  extendPages,
-  installModule, resolveAlias
+  defineNuxtModule
 } from '@nuxt/kit'
-import { Component, ModuleOptions, NuxtPage } from '@nuxt/schema'
+import { ModuleOptions, NuxtPage } from '@nuxt/schema'
 import { GlobalComponents } from 'vue'
 
 export type GlobalComponentNames = keyof GlobalComponents
