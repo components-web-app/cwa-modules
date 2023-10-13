@@ -71,7 +71,7 @@ export default defineNuxtModule<CwaModuleOptions>({
       base: true
     }
   },
-  async setup (options: CwaModuleOptions, nuxt) {
+  setup () {
     console.log('empty module')
   }
 })
